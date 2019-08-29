@@ -36,17 +36,17 @@ from wordcloud import WordCloud
 ### There are 7 Steps in this methodology
 
 ### Step 1. Importing & cleaning the dataframe
-df = pd.read_excel(r"H:\Quality and Safety\Interns\Max\Text Classification\Data.xlsx")
+df = pd.read_excel(r"H:___")
 # Cleaning the dataframe to remove null, non-important, or falls rows and columns ###
-df = df[df["EQ Review"].notnull()]
+df = df[df["___ Review"].notnull()]
 df = df[df["INCIDENT_DESCRIPTION"].notnull()]
 df = df[df['GENERAL_INC_TYPE'] != 'Fall']
-#df = df[df['EQ Review'] == 1]
-#df = df[df['EQ Review'] == 2]
+#df = df[df['___ Review'] == 1]
+#df = df[df['___ Review'] == 2]
 df = df[df['INCIDENT_SEVERITY'].notnull()]
-df = df[["INCIDENT_DESCRIPTION", "INCIDENT_SEVERITY", "EQ Review"]]
+df = df[["INCIDENT_DESCRIPTION", "INCIDENT_SEVERITY", "___ Review"]]
 df.rename(columns = {'INCIDENT_DESCRIPTION':'incident',
-                     'EQ Review':'eq review',
+                     '___ Review':'___ review',
                      'INCIDENT_SEVERITY':'severity'}, inplace=True)
 df["eq review"].value_counts()
 # fix the ordering of row numbers
@@ -60,17 +60,17 @@ stopset.extend(["pm", "ml", "l", "mg", "g", "mcg", "oz", "lbs", "lb", "qt", "mm"
                 "wa", "ha", "aa", "pt", "patient", "rn", "nurse", "np"])
 
 
-# Looking into the distribution of severity levels their respective eq reviews ###
-df2 = pd.read_excel(r"H:\Quality and Safety\Interns\Max\NLP Thesis Stuff\Python Code\Data.xlsx")
+# Looking into the distribution of severity levels their respective ___ reviews ###
+df2 = pd.read_excel(r"H:___")
 df2.isnull().sum()
-df2 = df2[df2["EQ Review"].notnull()]
+df2 = df2[df2["___ Review"].notnull()]
 df2.isnull().sum()
 df2 = df2[df2["INCIDENT_DESCRIPTION"].notnull()]
 df2.isnull().sum()
-df2.rename(columns = {'INCIDENT_DESCRIPTION':'incident', 'EQ Review':'eq review'}, inplace=True)
+df2.rename(columns = {'INCIDENT_DESCRIPTION':'incident', '___ Review':'___ review'}, inplace=True)
 df2['INCIDENT_SEVERITY'].value_counts()
-# creates a dataframe of only eq reviews
-df3 = df2[df2['eq review']==1]
+# creates a dataframe of only ___ reviews
+df3 = df2[df2['___ review']==1]
 df3['INCIDENT_SEVERITY'].value_counts()
 
 
@@ -94,8 +94,8 @@ median_word_count = df['incident'].str.split(' ').str.len().median() # median=49
 
 # Word cloud before pre-processing
 tokens = df.incident.str.cat(sep=' ') # Uses all observations
-#mask = np.array(Image.open(r'C:\Users\floodm\Downloads\mask-cloud3.png')) #cool mask
-mask = np.array(Image.open(r'C:\Users\floodm\Downloads\mask-cloud5.png')) #boring mask
+#mask = np.array(Image.open(r'C:___')) #cool mask
+mask = np.array(Image.open(r'C:___')) #boring mask
 wordcloud = WordCloud(max_words=150, background_color="white",
                       collocations = False, stopwords=[], mask=mask)
 wordcloud.generate(tokens)
@@ -166,11 +166,11 @@ max_word_count = df['incident'].str.split(' ').str.len().max() # max=2,479
 # Word cloud after pre-processing
 cloudstop = stopwords.words('english') # I can add extra words like html jumk into the list of words
 cloudstop.extend(["pm", "ml", "l", "mg", "g", "mcg", "oz", "lbs", "lb", "qt", "mm", 
-                "wa", "ha", "aa", "pt", "patient", "Patient", "PATIENT", "rn", "nurse", "np", "chemo",
-                "chemotherapy", "time", "chemo", 'UCC'])
+                "wa", "ha", "aa", "pt", "patient", "Patient", "PATIENT", "rn", "nurse", "np", "___",
+                "___", "time", "___", '___'])
 tokens = df.incident.str.cat(sep=' ')
-#mask = np.array(Image.open(r'C:\Users\floodm\Downloads\mask-cloud3.png')) #cool mask
-mask = np.array(Image.open(r'C:\Users\floodm\Downloads\mask-cloud4.png')) #boring mask
+#mask = np.array(Image.open(r'C:___')) #cool mask
+mask = np.array(Image.open(r'C:___')) #boring mask
 wordcloud = WordCloud(max_words=150, background_color="white", collocations = False,
                       stopwords=cloudstop, mask=mask)
 wordcloud.generate(tokens)
@@ -191,12 +191,12 @@ plt.show()
 
 
 # Bar chart of event distribution 
-sns.countplot(df['eq review'])
+sns.countplot(df['___ review'])
 
 
 # Bar chart of event distribution(changing the value names for thesis document purposes) 
 df2 = df
-df2.rename(columns = {'eq review':'Incident Type'}, inplace=True)
+df2.rename(columns = {'___ review':'Incident Type'}, inplace=True)
 df2['Incident Type'] = ['Not Reviewed' if x==0 else x for x in df2['Incident Type']]
 df2['Incident Type'] = ['Reviewed' if x==1 else x for x in df2['Incident Type']]
 sns.countplot(df2['Incident Type'])
@@ -218,9 +218,9 @@ cross_val_auc = []
 pred_sum = []
 actual_sum = []
 start = time.time()
-for train_index, test_index in kf.split(df['incident'], df['eq review']):
+for train_index, test_index in kf.split(df['incident'], df['___ review']):
     X_train, X_test = df['incident'][train_index], df['incident'][test_index]
-    y_train, y_test = df['eq review'][train_index], df['eq review'][test_index]
+    y_train, y_test = df['___ review'][train_index], df['___ review'][test_index]
     ### Step 3. Vectorizing the text data
     vect = TfidfVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
     vectorizer = vect.fit(X_train)
@@ -324,9 +324,9 @@ cross_val_precision = []
 cross_val_recall = []
 cross_val_f1 = []
 cross_val_auc = []
-for train_index, test_index in kf.split(df['incident'], df['eq review']):
+for train_index, test_index in kf.split(df['incident'], df['___ review']):
     X_train, X_test = df['incident'][train_index], df['incident'][test_index]
-    y_train, y_test = df['eq review'][train_index], df['eq review'][test_index]
+    y_train, y_test = df['___ review'][train_index], df['___ review'][test_index]
     vect = TfidfVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
     vectorizer = vect.fit(X_train)
     X_train_vectorized = vectorizer.transform(X_train)
@@ -383,9 +383,9 @@ tprs = []
 aucs = []
 mean_fpr = np.linspace(0, 1, 100)
 i = 0
-for train_index, test_index in kf.split(df['incident'], df['eq review']):
+for train_index, test_index in kf.split(df['incident'], df['___ review']):
     X_train, X_test = df['incident'][train_index], df['incident'][test_index]
-    y_train, y_test = df['eq review'][train_index], df['eq review'][test_index]
+    y_train, y_test = df['___ review'][train_index], df['___ review'][test_index]
     vect = TfidfVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
     vectorizer = vect.fit(X_train)
     X_train_vectorized = vectorizer.transform(X_train)
