@@ -80,17 +80,17 @@ from scipy.sparse import csr_matrix
 ### Step 1. Importing & cleaning the dataframe
 
 # importing the dataframe
-df = pd.read_excel(r"H:\Quality and Safety\Interns\Max\Text Classification\Data.xlsx")
+df = pd.read_excel(r"H:___")
 # Cleaning the dataframe to remove null, non-important, or falls rows and columns ###
-df = df[df["EQ Review"].notnull()]
+df = df[df["___ Review"].notnull()]
 df = df[df["INCIDENT_DESCRIPTION"].notnull()]
 df = df[df['GENERAL_INC_TYPE'] != 'Fall']
 df = df[df['INCIDENT_SEVERITY'].notnull()]
-df = df[["INCIDENT_DESCRIPTION", "INCIDENT_SEVERITY", "EQ Review"]]
+df = df[["INCIDENT_DESCRIPTION", "INCIDENT_SEVERITY", "___ Review"]]
 df.rename(columns = {'INCIDENT_DESCRIPTION':'incident',
-                     'EQ Review':'eq review',
+                     '___ Review':'___ review',
                      'INCIDENT_SEVERITY':'severity'}, inplace=True)
-df["eq review"].value_counts()
+df["___ review"].value_counts()
 # fix the ordering of row numbers
 df = df.sample(frac=1, random_state=777)
 df.reset_index(drop=True, inplace=True)
@@ -103,17 +103,17 @@ stopset.extend(["pm", "ml", "l", "mg", "g", "mcg", "oz", "lbs", "lb", "qt", "mm"
                 "wa", "ha", "aa", "pt", "patient", "rn", "nurse", "np"])
 
 
-# Looking into the distribution of severity levels their respective eq reviews ###
-df2 = pd.read_excel(r"H:\Quality and Safety\Interns\Max\NLP Thesis Stuff\Python Code\Data.xlsx")
+# Looking into the distribution of severity levels their respective ___ reviews ###
+df2 = pd.read_excel(r"H:___")
 df2.isnull().sum()
-df2 = df2[df2["EQ Review"].notnull()]
+df2 = df2[df2["___ Review"].notnull()]
 df2.isnull().sum()
 df2 = df2[df2["INCIDENT_DESCRIPTION"].notnull()]
 df2.isnull().sum()
-df2.rename(columns = {'INCIDENT_DESCRIPTION':'incident', 'EQ Review':'eq review'}, inplace=True)
+df2.rename(columns = {'INCIDENT_DESCRIPTION':'incident', '___ Review':'___ review'}, inplace=True)
 df2['INCIDENT_SEVERITY'].value_counts()
-# creates a dataframe of only eq reviews
-df3 = df2[df2['eq review']==1]
+# creates a dataframe of only ___ reviews
+df3 = df2[df2['___ review']==1]
 df3['INCIDENT_SEVERITY'].value_counts()
 
 
@@ -121,7 +121,7 @@ df3['INCIDENT_SEVERITY'].value_counts()
 tokens = df.incident.str.cat(sep=' ')
 tokens = WordPunctTokenizer().tokenize(tokens) # shows there are 2,503,920 words in this corpus
 # shows how many unique words there are
-unique_words = nltk.FreqDist(tokens) # shows 44,200 unique words
+unique_words = nltk.Fr___Dist(tokens) # shows 44,200 unique words
 top_words = unique_words.most_common(0)
 # ploting the most common words
 plt.figure(figsize=(16,5)) #increase this to (16,5) for larger display
@@ -179,7 +179,7 @@ df['incident'] = X
 tokens = df.incident.str.cat(sep=' ')
 tokens = WordPunctTokenizer().tokenize(tokens) #shows there are 1,297,146 words in this corpus
 # shows how many unique words there are
-unique_words = nltk.FreqDist(tokens) # shows 21,116 unique words
+unique_words = nltk.Fr___Dist(tokens) # shows 21,116 unique words
 top_words = unique_words.most_common(50)
 # ploting the most common words
 plt.figure(figsize=(16,5)) #increase this to (16,5) for larger display
@@ -275,9 +275,9 @@ cross_val_auc = []
 pred_sum = []
 actual_sum = []
 start = time.time()
-for train_index, test_index in kf.split(df['incident'], df['eq review']):
+for train_index, test_index in kf.split(df['incident'], df['___ review']):
     X_train, X_test = df['incident'][train_index], df['incident'][test_index]
-    y_train, y_test = df['eq review'][train_index], df['eq review'][test_index]
+    y_train, y_test = df['___ review'][train_index], df['___ review'][test_index]
     ### Step 3. Vectorizing the text data
     vect = TfidfVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
     #vect = CountVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
@@ -412,9 +412,9 @@ cross_val_recall = []
 cross_val_f1 = []
 cross_val_auc = []
 start = time.time()
-for train_index, test_index in kf.split(df['incident'], df['eq review']):
+for train_index, test_index in kf.split(df['incident'], df['___ review']):
     X_train, X_test = df['incident'][train_index], df['incident'][test_index]
-    y_train, y_test = df['eq review'][train_index], df['eq review'][test_index]
+    y_train, y_test = df['___ review'][train_index], df['___ review'][test_index]
     ### Vectorizing the text data
     vect = TfidfVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
     #vect = CountVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
@@ -515,9 +515,9 @@ cross_val_f1 = []
 cross_val_auc = []
 test = []
 start = time.time()
-for train_index, test_index in kf.split(df['incident'], df['eq review']):
+for train_index, test_index in kf.split(df['incident'], df['___ review']):
     X_train, X_test = df['incident'][train_index], df['incident'][test_index]
-    y_train, y_test = df['eq review'][train_index], df['eq review'][test_index]
+    y_train, y_test = df['___ review'][train_index], df['___ review'][test_index]
     ### Step 3. Vectorizing the text data
     vect = TfidfVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
     #vect = CountVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
@@ -585,9 +585,9 @@ cross_val_recall = []
 cross_val_f1 = []
 cross_val_auc = []
 start = time.time()
-for train_index, test_index in kf.split(df['incident'], df['eq review']):
+for train_index, test_index in kf.split(df['incident'], df['___ review']):
     X_train, X_test = df['incident'][train_index], df['incident'][test_index]
-    y_train, y_test = df['eq review'][train_index], df['eq review'][test_index]
+    y_train, y_test = df['___ review'][train_index], df['___ review'][test_index]
     ### Vectorizing the text data
     vect = TfidfVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
     #vect = CountVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
@@ -682,9 +682,9 @@ cross_val_auc = []
 pred_sum = []
 actual_sum = []
 start = time.time()
-for train_index, test_index in kf.split(df['incident'], df['eq review']):
+for train_index, test_index in kf.split(df['incident'], df['___ review']):
     X_train, X_test = df['incident'][train_index], df['incident'][test_index]
-    y_train, y_test = df['eq review'][train_index], df['eq review'][test_index]
+    y_train, y_test = df['___ review'][train_index], df['___ review'][test_index]
     ### Step 3. Vectorizing the text data
     vect = TfidfVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
     #vect = CountVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
@@ -836,9 +836,9 @@ cross_val_recall = []
 cross_val_f1 = []
 cross_val_auc = []
 start = time.time()
-for train_index, test_index in kf.split(df['incident'], df['eq review']):
+for train_index, test_index in kf.split(df['incident'], df['___ review']):
     X_train, X_test = df['incident'][train_index], df['incident'][test_index]
-    y_train, y_test = df['eq review'][train_index], df['eq review'][test_index]
+    y_train, y_test = df['___ review'][train_index], df['___ review'][test_index]
     ### Vectorizing the text data
     vect = TfidfVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
     #vect = CountVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
@@ -958,9 +958,9 @@ tprs = []
 aucs = []
 mean_fpr = np.linspace(0, 1, 100)
 i = 0
-for train_index, test_index in kf.split(df['incident'], df['eq review']):
+for train_index, test_index in kf.split(df['incident'], df['___ review']):
     X_train, X_test = df['incident'][train_index], df['incident'][test_index]
-    y_train, y_test = df['eq review'][train_index], df['eq review'][test_index]
+    y_train, y_test = df['___ review'][train_index], df['___ review'][test_index]
     vect = TfidfVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
     #vect = CountVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
     vectorizer = vect.fit(X_train)
@@ -1024,9 +1024,9 @@ tprs = []
 aucs = []
 mean_precision = np.linspace(0, 1, 100)
 i = 0
-for train_index, test_index in kf.split(df['incident'], df['eq review']):
+for train_index, test_index in kf.split(df['incident'], df['___ review']):
     X_train, X_test = df['incident'][train_index], df['incident'][test_index]
-    y_train, y_test = df['eq review'][train_index], df['eq review'][test_index]
+    y_train, y_test = df['___ review'][train_index], df['___ review'][test_index]
     vect = TfidfVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
     #vect = CountVectorizer(stop_words = stopset, min_df=2, ngram_range=(1,1))
     vectorizer = vect.fit(X_train)
